@@ -99,6 +99,26 @@ def api_predict():
                 
     
             return X
+    from sklearn.pipeline import Pipeline
+    from sklearn.preprocessing import MinMaxScaler
+    #config features
+    CATEGORICAL_VARS_WITH_NA = ["Saving accounts","Checking account"]
+    CATEGORICAL_VARS=['Sex', 'Housing', 'Saving accounts', 'Checking account', 'Purpose']
+    NUMERICAL_VARS_FOR_BOXCOX=["Age","Credit amount","Duration"]
+    
+    pipeline=Pipeline([
+        (
+            "categorical_imputer", CategoricalImputer(variables=CATEGORICAL_VARS_WITH_NA),
+        ),
+        (
+            "categorical_encoder", CategoricalEncoder(variables=CATEGORICAL_VARS),
+        ),
+        (
+            "boxcox_transformer", BoxcoxTransformer(variables=NUMERICAL_VARS_FOR_BOXCOX),
+        ),
+        (   "scaler", MinMaxScaler(),
+        )
+    ])
 
     model=joblib.load("model.pkl")
     pipeline=joblib.load("pipeline.pkl")
