@@ -143,4 +143,6 @@ def api_predict():
 
 
 if __name__=="__main__":
+    model=joblib.load("model.pkl")
+    pipeline=joblib.load("pipeline.pkl")
     app.run()
