@@ -11,7 +11,10 @@ app = Flask(__name__)
 model=joblib.load("model.pkl")
 pipeline=joblib.load("pipeline.pkl")
     
-
+def predict(data,model=model,pipeline=pipeline):
+    inp=pipeline.transform(data)
+    prediction=model.predict(inp)
+    return prediction
         
 
 @app.route('/api_predict', methods=["GET", "POST"])
@@ -24,8 +27,8 @@ def api_predict():
         data = request.get_json()
         
         inp=pd.json_normalize(data)
-        inp=pipeline.transform(inp)        
-        prediction = model.predict(inp)
+                
+        prediction = predict(inp)
 
         if prediction[0]==0:
             output="Credit risk is BAD!"
